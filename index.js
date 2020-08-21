@@ -1,7 +1,5 @@
 const fs = require("fs");
 const path = require("path");
-console.log("path", path);
-
 const utils = require("util");
 const puppeteer = require("puppeteer");
 const hb = require("handlebars");
@@ -16,6 +14,7 @@ async function getTemplateHtml() {
     return Promise.reject("Could not load html template");
   }
 }
+
 async function generatePdf() {
   let data = {};
   getTemplateHtml()
@@ -35,12 +34,27 @@ async function generatePdf() {
       // We set the page content as the generated html by handlebars
       await page.setContent(html);
       // We use pdf function to generate the pdf in the same folder as this file.
-      await page.pdf({ path: "public/invoice.pdf", format: "A4" });
+      let path = getDirPath();
+      await page.pdf({ path: path, format: "A4" });
       await browser.close();
       console.log("PDF Generated");
     })
     .catch((err) => {
       console.error(err);
     });
+}
+
+function getDirPath() {
+  let dir = "public/shop_1/2020/08/21/";
+  //   const fileName = "/bao_gia_20_08_21.pdf";
+  const uuid = require("uuid");
+  const fileName = uuid.v4() + ".pdf";
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true }, (err) => {
+      if (err) throw err;
+    });
+  }
+
+  return dir + fileName;
 }
 generatePdf();
