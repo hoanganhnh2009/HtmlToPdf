@@ -45,7 +45,7 @@ async function generatePdf() {
 }
 
 function getDirPath() {
-  let dir = "public/shop_1/2020/08/21/";
+  let dir = "public/uploads/pdf/shop_1/2020/08/21/";
   //   const fileName = "/bao_gia_20_08_21.pdf";
   const uuid = require("uuid");
   const fileName = uuid.v4() + ".pdf";
